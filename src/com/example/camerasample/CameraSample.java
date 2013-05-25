@@ -1,4 +1,4 @@
-package com.gclue.CameraSample;
+package com.example.camerasample;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,9 +24,7 @@ public class CameraSample extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Notification Barを消す
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		// Title Barを消す
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		CameraView mCamera = new CameraView(this);
@@ -41,9 +39,6 @@ public class CameraSample extends Activity {
  * CameraView
  */
 class CameraView extends SurfaceView implements SurfaceHolder.Callback {
-	/**
-	 * Cameraのインスタンスを格納する変数
-	 */
 	private Camera mCamera;
 
 	public CameraView(Context context) {
@@ -52,30 +47,21 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
 
-	/**
-	 * Surfaceに変化があった場合に呼ばれる
-	 */
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		Log.i("CAMERA", "surfaceChaged");
 
-		// 画面設定
 		Camera.Parameters parameters = mCamera.getParameters();
 		parameters.setPreviewSize(width, height);
 		mCamera.setParameters(parameters);
 
-		// プレビュー表示を開始
 		mCamera.startPreview();
 	}
 
-	/**
-	 * Surfaceが生成された際に呼ばれる
-	 */
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.i("CAMERA", "surfaceCreated");
 
-		// カメラをOpen
 		mCamera = Camera.open();
 		try {
 			mCamera.setPreviewDisplay(holder);
@@ -83,50 +69,32 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	/**
-	 * Surfaceが破棄された場合に呼ばれる
-	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.i("CAMERA", "surfaceDestroyed");
 
-		// カメラをClose
 		mCamera.stopPreview();
 		mCamera.release();
 		mCamera = null;
 	}
 }
 
-/**
- * オーバーレイ描画用のクラス
- */
 class MyView extends View {
 
-	/**
-	 * コンストラクタ
-	 * 
-	 * @param context
-	 */
 	public MyView(Context context) {
 		super(context);
 		setFocusable(true);
 	}
 
-	/**
-	 * 描画処理
-	 */
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		/* 背景色を設定 */
 		canvas.drawColor(Color.TRANSPARENT);
 
-		/* 描画するための線の色を設定 */
 		Paint mainPaint = new Paint();
 		mainPaint.setStyle(Paint.Style.FILL);
 		mainPaint.setARGB(255, 255, 255, 100);
 
-		/* 線で描画 */
 		canvas.drawLine(0, 0, 50, 50, mainPaint);
 	}
 }
